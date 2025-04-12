@@ -10,12 +10,7 @@ class TetrisCanvasDrawer {
   drawBlock(x, y, color) {
     this.context.fillStyle = color;
     const pixelSize = this.getPixelSize();
-    this.context.fillRect(
-      x * pixelSize,
-      y * pixelSize,
-      pixelSize,
-      pixelSize
-    );
+    this.context.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
   }
 
   getPixelSize() {
@@ -23,16 +18,12 @@ class TetrisCanvasDrawer {
   }
 
   clearBlock(x, y) {
-    this.context.clearRect(
-      x * this.getPixelSize(),
-      y * this.getPixelSize(),
-      this.getPixelSize(),
-      this.getPixelSize()
-    );
+    const pixelSize = this.getPixelSize();
+    this.context.clearRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
   }
 }
 
-const backgroundCanvas = document.getElementById('background-canvas');
-const inGameCanvas = document.getElementById('in-game-canvas');
+const backgroundCanvas = document.getElementById("background-canvas");
+const inGameCanvas = document.getElementById("in-game-canvas");
 const tetrisBackgroundDrawer = new TetrisCanvasDrawer(backgroundCanvas);
 const tetrisInGameDrawer = new TetrisCanvasDrawer(inGameCanvas);
