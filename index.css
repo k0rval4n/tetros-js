@@ -1,0 +1,90 @@
+body {
+  background-color: black;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#score-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+#score-prefix-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+#score-value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+}
+
+#game-board {
+  height: 60vh;
+  min-height: 300px;
+  width: 30vh;
+  min-width: 150px;
+  background-color: cadetblue;
+}
+
+.game-button {
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+#in-game-controls {
+  display: none;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#in-game-controls > div button {
+  width: 15vh;
+  min-width: 75px;
+}
+
+#pause-and-resume-buttons > button {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+#pause-button {
+  display: block;
+}
+
+#resume-button {
+  display: none;
+}
+
+#start-button {
+  width: 30vh;
+  min-width: 150px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+#stop-button {
+  display: block;
+  width: 30vh;
+  min-width: 150px;
+  background-color: crimson;
+  color: white;
+}
