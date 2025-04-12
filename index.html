@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
+    <link rel="script" href="index.js">
 </head>
 <body>
     <div class="main-container">
@@ -21,15 +22,18 @@
                     <p id="score-value">0</p>
                 </div>
             </div>
-            <div id="game-board"></div>
-            <button id="start-button" class="game-button">Start Game</button>
+            <div id="game-board">
+                <canvas id="background-canvas" height="600" width="300"></canvas>
+                <canvas id="in-game-canvas" height="600" width="300"></canvas>
+            </div>
+            <button id="start-button" type="button" class="game-button" onclick="drawAlgo()">Start Game</button>
             <div id="in-game-controls">
                 <div id="pause-and-resume-buttons">
-                    <button id="pause-button" class="game-button">Pause Game</button>
-                    <button id="resume-button" class="game-button">Resume Game</button>
+                    <button id="pause-button" type="button" class="game-button">Pause Game</button>
+                    <button id="resume-button" type="button" class="game-button">Resume Game</button>
                 </div>
                 <div>
-                    <button id="stop-button" class="game-button">Stop Game</button>
+                    <button id="stop-button" type="button" class="game-button">Stop Game</button>
                 </div>
             </div>
         </div>
