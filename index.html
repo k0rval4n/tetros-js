@@ -23,17 +23,16 @@
                 </div>
             </div>
             <div id="game-board">
-                <canvas id="background-canvas" height="600" width="300"></canvas>
-                <canvas id="in-game-canvas" height="600" width="300"></canvas>
+                <canvas id="game-canvas" height="600" width="300"></canvas>
             </div>
-            <button id="start-button" type="button" class="game-button">Start Game</button>
+            <button id="start-button" type="button" class="game-button" onclick="startGame()">Start Game</button>
             <div id="in-game-controls">
                 <div id="pause-and-resume-buttons">
-                    <button id="pause-button" type="button" class="game-button">Pause Game</button>
-                    <button id="resume-button" type="button" class="game-button">Resume Game</button>
+                    <button id="pause-button" type="button" class="game-button" onclick="pauseGame()">Pause Game</button>
+                    <button id="resume-button" type="button" class="game-button" onclick="resumeGame()">Resume Game</button>
                 </div>
                 <div>
-                    <button id="stop-button" type="button" class="game-button">Stop Game</button>
+                    <button id="stop-button" type="button" class="game-button" onclick="stopGame()">Stop Game</button>
                 </div>
             </div>
         </div>
