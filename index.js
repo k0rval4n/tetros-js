@@ -322,26 +322,6 @@ class TetrosBoardController {
     this.drawTetromino();
   }
 
-  addTetrominoToBackground() {
-    const x_tetromino = this.currentTetromino.x;
-    const y_tetromino = this.currentTetromino.y;
-    const shape = this.currentTetromino.shape;
-    for (let i = 0; i < shape.length; i++) {
-      for (let j = 0; j < shape[i].length; j++) {
-        if (shape[i][j] === 1) {
-          const newX = x_tetromino + j;
-          const newY = y_tetromino + i;
-          this.backgroundBlocks.addBlock(
-            newX,
-            newY,
-            this.currentTetromino.color
-          );
-        }
-      }
-    }
-    this.updateBackground();
-  }
-
   drawTetromino() {
     const x_tetromino = this.currentTetromino.x;
     const y_tetromino = this.currentTetromino.y;
@@ -398,28 +378,61 @@ class TetrosBoardController {
       }
     }
   }
+}
 
-  checkCompleteLines() {
-    let hasChanged = false;
-    for (let y = 0; y < 23; y++) {
-      let complete = true;
-      for (let x = 0; x < 10; x++) {
-        if (!this.backgroundBlocks.getBlock(x, y)) {
-          complete = false;
-          break;
+class BackgroundBlocksController {
+  constructor(backgroundBlocks) {
+    this.backgroundBlocks = backgroundBlocks;
+  }
+
+  addTetrominoToBackground(currentTetromino) {
+    const x_tetromino = currentTetromino.x;
+    const y_tetromino = currentTetromino.y;
+    const shape = currentTetromino.shape;
+    for (let i = 0; i < shape.length; i++) {
+      for (let j = 0; j < shape[i].length; j++) {
+        if (shape[i][j] === 1) {
+          const newX = x_tetromino + j;
+          const newY = y_tetromino + i;
+          this.backgroundBlocks.addBlock(newX, newY, currentTetromino.color);
         }
       }
-      if (complete) {
-        this.removeCompleteLine(y);
-        hasChanged = true;
-      }
-    }
-    if (hasChanged) {
-      this.updateBackground();
     }
   }
 
-  removeCompleteLine(y) {
+  getCountOfNLinesCompletedAndRemoveThem(N) {
+    let count = 0;
+    let isComplete = false;
+    for (let y = 0; y < 23; y++) {
+      for (let i = y; i < y + N; i++) {
+        isComplete = this.isLineComplete(i);
+        if (!isComplete) {
+          break;
+        }
+      }
+      if (isComplete) {
+        for (let i = y; i < y + N; i++) {
+          this.removeLine(y);
+        }
+        count++;
+      }
+    }
+    return count;
+  }
+
+  isLineComplete(y) {
+    let isComplete = true;
+    for (let x = 0; x < 10; x++) {
+      if (!this.backgroundBlocks.getBlock(x, y)) {
+        isComplete = false;
+        break;
+      }
+    }
+
+    return isComplete;
+  }
+
+  removeLine(y) {
     for (let i = y; i > 0; i--) {
       this.backgroundBlocks.blocks[i] = this.backgroundBlocks.blocks[i - 1];
     }
@@ -480,8 +493,17 @@ class TetrosController {
     this.boardController = new TetrosBoardController();
     this.eventListener = new TetrosEventListener(this.boardController);
     this.gameOverChecker = new TetrosGameOverChecker(this.boardController);
+    this.backgroundBlocksController = new BackgroundBlocksController(
+      this.boardController.backgroundBlocks
+    );
     this.lastLoopTime = Date.now();
     this.isFirstLoop = true;
+    this.score = 0;
+    this.linesCompleted = 0;
+  }
+
+  get level() {
+    return Math.trunc(this.linesCompleted / 10);
   }
 
   gameLoop() {
@@ -497,7 +519,10 @@ class TetrosController {
     }
     this.lastLoopTime = currentTime;
     if (!this.boardController.hasTetrominoMovedDown()) {
-      this.boardController.addTetrominoToBackground();
+      const currentTetromino = this.boardController.currentTetromino;
+      this.backgroundBlocksController.addTetrominoToBackground(
+        currentTetromino
+      );
       this.boardController.setRandomTetromino();
     }
     this.boardController.clearTetromino();
@@ -506,9 +531,61 @@ class TetrosController {
       this.boardController.currentTetromino.y + 1
     );
     this.boardController.drawTetromino();
-    this.boardController.checkCompleteLines();
+    this.removeCompletedLinesAndAddScore();
+    this.boardController.updateBackground();
+    this.updateScore();
+    this.updateLevel();
 
     requestAnimationFrame(this.gameLoop.bind(this));
+  }
+
+  removeCompletedLinesAndAddScore() {
+    for (let i = 1; i <= 4; i++) {
+      const count =
+        this.backgroundBlocksController.getCountOfNLinesCompletedAndRemoveThem(
+          i
+        );
+      if (count > 0) {
+        this.linesCompleted += count * i;
+        this.score += count * TetrosScoreCalculator.getScoreOfLinesCompleted(
+          this.level,
+          i
+        );
+      }
+    }
+  }
+
+  updateScore() {
+    const scoreElement = document.getElementById("score-value");
+    scoreElement.innerText = this.score;
+  }
+
+  updateLevel() {
+    const levelElement = document.getElementById("level-value");
+    levelElement.innerText = this.level;
+  }
+}
+
+class TetrosScoreCalculator {
+  static scoresByLevel = {
+    1: [40, 80, 120, 400],
+    2: [100, 200, 300, 1000],
+    3: [300, 600, 900, 3000],
+    4: [1200, 2400, 3600, 12000]
+  }
+  
+  static getScoreOfLinesCompleted(level, numberOfAdjacentLines) {
+    if (level === 0) {
+      return this.scoresByLevel[numberOfAdjacentLines][0];
+    } else if (level === 1) {
+      return this.scoresByLevel[numberOfAdjacentLines][1];
+    } else if (level === 2) {
+      return this.scoresByLevel[numberOfAdjacentLines][2];
+    } else if (level <= 9) {
+      return this.scoresByLevel[numberOfAdjacentLines][3];
+    } else {
+      return this.scoresByLevel[numberOfAdjacentLines][0] * (level + 1);
+    }
   }
 }
 
@@ -519,20 +596,20 @@ const startGame = () => {
   startButton.style.display = "none";
   const inGameControls = document.getElementById("in-game-controls");
   inGameControls.style.display = "flex";
-}
+};
 
 const pauseGame = () => {
   const pauseButton = document.getElementById("pause-button");
   pauseButton.style.display = "none";
   const resumeButton = document.getElementById("resume-button");
   resumeButton.style.display = "block";
-}
+};
 
 const resumeGame = () => {
   const resumeButton = document.getElementById("resume-button");
   resumeButton.style.display = "none";
   const pauseButton = document.getElementById("pause-button");
   pauseButton.style.display = "block";
-}
+};
 
-const stopGame = () => {}
+const stopGame = () => {};

@@ -13,24 +13,40 @@ body {
   height: 100vh;
 }
 
-#score-container {
+#score-container, #level-container  {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
-#score-prefix-container {
+
+#level-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#score-container {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#score-prefix-container, #level-prefix-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
 }
 
-#score-value-container {
+#score-value-container, #level-value-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: end;
+}
+
+#score-value-container > p, #level-value-container > p {
+  margin: 0;
+  color: white;
 }
 
 #game-board {
