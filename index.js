@@ -519,24 +519,35 @@ class TetrosController {
     }
     this.lastLoopTime = currentTime;
     if (!this.boardController.hasTetrominoMovedDown()) {
-      const currentTetromino = this.boardController.currentTetromino;
-      this.backgroundBlocksController.addTetrominoToBackground(
-        currentTetromino
-      );
-      this.boardController.setRandomTetromino();
+      this.prepareNextTetromino();
+
+      requestAnimationFrame(this.gameLoop.bind(this));
     }
-    this.boardController.clearTetromino();
-    this.boardController.tryToMoveTetromino(
-      this.boardController.currentTetromino.x,
-      this.boardController.currentTetromino.y + 1
-    );
-    this.boardController.drawTetromino();
+    this.tryToMoveTetrominoDown();
     this.removeCompletedLinesAndAddScore();
     this.boardController.updateBackground();
     this.updateScore();
     this.updateLevel();
 
     requestAnimationFrame(this.gameLoop.bind(this));
+  }
+
+  prepareNextTetromino() {
+    const currentTetromino = this.boardController.currentTetromino;
+    this.backgroundBlocksController.addTetrominoToBackground(currentTetromino);
+    this.boardController.clearTetromino();
+    this.boardController.setRandomTetromino();
+    this.boardController.drawTetromino();
+    this.boardController.updateBackground();
+  }
+
+  tryToMoveTetrominoDown() {
+    this.boardController.clearTetromino();
+    this.boardController.tryToMoveTetromino(
+      this.boardController.currentTetromino.x,
+      this.boardController.currentTetromino.y + 1
+    );
+    this.boardController.drawTetromino();
   }
 
   removeCompletedLinesAndAddScore() {
@@ -547,10 +558,8 @@ class TetrosController {
         );
       if (count > 0) {
         this.linesCompleted += count * i;
-        this.score += count * TetrosScoreCalculator.getScoreOfLinesCompleted(
-          this.level,
-          i
-        );
+        this.score +=
+          count * TetrosScoreCalculator.getScoreOfLinesCompleted(this.level, i);
       }
     }
   }
@@ -571,9 +580,9 @@ class TetrosScoreCalculator {
     1: [40, 80, 120, 400],
     2: [100, 200, 300, 1000],
     3: [300, 600, 900, 3000],
-    4: [1200, 2400, 3600, 12000]
-  }
-  
+    4: [1200, 2400, 3600, 12000],
+  };
+
   static getScoreOfLinesCompleted(level, numberOfAdjacentLines) {
     if (level === 0) {
       return this.scoresByLevel[numberOfAdjacentLines][0];
