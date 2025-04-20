@@ -26,7 +26,7 @@ class TetrosCanvasDrawer {
   }
 }
 
-class Tetrimino {
+class Tetromino {
   constructor(shapes, color) {
     this.shapes = shapes;
     this.actualShapeIndex = 0;
@@ -59,7 +59,7 @@ class Tetrimino {
   }
 }
 
-class OTetrimino extends Tetrimino {
+class OTetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -72,7 +72,7 @@ class OTetrimino extends Tetrimino {
   }
 }
 
-class ITetrimino extends Tetrimino {
+class ITetromino extends Tetromino {
   constructor() {
     // prettier-ignore
     const shapes = [
@@ -91,7 +91,7 @@ class ITetrimino extends Tetrimino {
   }
 }
 
-class JTetrimino extends Tetrimino {
+class JTetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -117,7 +117,7 @@ class JTetrimino extends Tetrimino {
   }
 }
 
-class LTetrimino extends Tetrimino {
+class LTetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -143,7 +143,7 @@ class LTetrimino extends Tetrimino {
   }
 }
 
-class STetrimino extends Tetrimino {
+class STetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -160,7 +160,7 @@ class STetrimino extends Tetrimino {
   }
 }
 
-class ZTetrimino extends Tetrimino {
+class ZTetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -177,7 +177,7 @@ class ZTetrimino extends Tetrimino {
   }
 }
 
-class TTetrimino extends Tetrimino {
+class TTetromino extends Tetromino {
   constructor() {
     const shapes = [
       [
@@ -203,14 +203,14 @@ class TTetrimino extends Tetrimino {
   }
 }
 
-const TETRIMINOS = [
-  OTetrimino,
-  ITetrimino,
-  JTetrimino,
-  LTetrimino,
-  STetrimino,
-  ZTetrimino,
-  TTetrimino,
+const TETROMINOS = [
+  OTetromino,
+  ITetromino,
+  JTetromino,
+  LTetromino,
+  STetromino,
+  ZTetromino,
+  TTetromino,
 ];
 
 class BackgroundBlocks {
@@ -238,27 +238,27 @@ class TetrosBoardController {
     const gameCanvas = document.getElementById("game-canvas");
     this.tetrosInGameDrawer = new TetrosCanvasDrawer(gameCanvas);
     this.backgroundBlocks = new BackgroundBlocks();
-    this.setRandomTetrimino();
+    this.setRandomTetromino();
   }
 
-  setRandomTetrimino() {
+  setRandomTetromino() {
     const randomIndex =
-      Math.floor(Math.random() * TETRIMINOS.length) % TETRIMINOS.length;
+      Math.floor(Math.random() * TETROMINOS.length) % TETROMINOS.length;
     this.lastY = null;
-    this.currentTetrimino = new TETRIMINOS[randomIndex]();
+    this.currentTetromino = new TETROMINOS[randomIndex]();
   }
 
-  hasTetriminoMovedDown() {
-    const y_tetrimino = this.currentTetrimino.y;
-    if (this.lastY !== y_tetrimino) {
-      this.lastY = y_tetrimino;
+  hasTetrominoMovedDown() {
+    const y_tetromino = this.currentTetromino.y;
+    if (this.lastY !== y_tetromino) {
+      this.lastY = y_tetromino;
       return true;
     }
     return false;
   }
 
-  tryToMoveTetrimino(x, y) {
-    const shape = this.currentTetrimino.shape;
+  tryToMoveTetromino(x, y) {
+    const shape = this.currentTetromino.shape;
     for (let i = 0; i < shape.length; i++) {
       for (let j = 0; j < shape[i].length; j++) {
         if (shape[i][j] === 1) {
@@ -272,21 +272,21 @@ class TetrosBoardController {
         }
       }
     }
-    this.clearTetrimino();
-    this.currentTetrimino.x = x;
-    this.currentTetrimino.y = y;
-    this.drawTetrimino();
+    this.clearTetromino();
+    this.currentTetromino.x = x;
+    this.currentTetromino.y = y;
+    this.drawTetromino();
   }
 
-  tryToRotateToLeftTetrimino() {
-    const x_tetrimino = this.currentTetrimino.x;
-    const y_tetrimino = this.currentTetrimino.y;
-    const leftRotationShape = this.currentTetrimino.leftRotationShape;
+  tryToRotateToLeftTetromino() {
+    const x_tetromino = this.currentTetromino.x;
+    const y_tetromino = this.currentTetromino.y;
+    const leftRotationShape = this.currentTetromino.leftRotationShape;
     for (let i = 0; i < leftRotationShape.length; i++) {
       for (let j = 0; j < leftRotationShape[i].length; j++) {
         if (leftRotationShape[i][j] === 1) {
-          const newX = x_tetrimino + j;
-          const newY = y_tetrimino + i;
+          const newX = x_tetromino + j;
+          const newY = y_tetromino + i;
           if (newX < 0 || newX >= 10 || newY >= 23) {
             return;
           } else if (this.backgroundBlocks.getBlock(newX, newY)) {
@@ -295,20 +295,20 @@ class TetrosBoardController {
         }
       }
     }
-    this.clearTetrimino();
-    this.currentTetrimino.rotateToLeft();
-    this.drawTetrimino();
+    this.clearTetromino();
+    this.currentTetromino.rotateToLeft();
+    this.drawTetromino();
   }
 
-  tryToRotateToRightTetrimino() {
-    const x_tetrimino = this.currentTetrimino.x;
-    const y_tetrimino = this.currentTetrimino.y;
-    const rightRotationShape = this.currentTetrimino.rightRotationShape;
+  tryToRotateToRightTetromino() {
+    const x_tetromino = this.currentTetromino.x;
+    const y_tetromino = this.currentTetromino.y;
+    const rightRotationShape = this.currentTetromino.rightRotationShape;
     for (let i = 0; i < rightRotationShape.length; i++) {
       for (let j = 0; j < rightRotationShape[i].length; j++) {
         if (rightRotationShape[i][j] === 1) {
-          const newX = x_tetrimino + j;
-          const newY = y_tetrimino + i;
+          const newX = x_tetromino + j;
+          const newY = y_tetromino + i;
           if (newX < 0 || newX >= 10 || newY >= 23) {
             return;
           } else if (this.backgroundBlocks.getBlock(newX, newY)) {
@@ -317,24 +317,24 @@ class TetrosBoardController {
         }
       }
     }
-    this.clearTetrimino();
-    this.currentTetrimino.rotateToRight();
-    this.drawTetrimino();
+    this.clearTetromino();
+    this.currentTetromino.rotateToRight();
+    this.drawTetromino();
   }
 
-  addTetriminoToBackground() {
-    const x_tetrimino = this.currentTetrimino.x;
-    const y_tetrimino = this.currentTetrimino.y;
-    const shape = this.currentTetrimino.shape;
+  addTetrominoToBackground() {
+    const x_tetromino = this.currentTetromino.x;
+    const y_tetromino = this.currentTetromino.y;
+    const shape = this.currentTetromino.shape;
     for (let i = 0; i < shape.length; i++) {
       for (let j = 0; j < shape[i].length; j++) {
         if (shape[i][j] === 1) {
-          const newX = x_tetrimino + j;
-          const newY = y_tetrimino + i;
+          const newX = x_tetromino + j;
+          const newY = y_tetromino + i;
           this.backgroundBlocks.addBlock(
             newX,
             newY,
-            this.currentTetrimino.color
+            this.currentTetromino.color
           );
         }
       }
@@ -342,20 +342,20 @@ class TetrosBoardController {
     this.updateBackground();
   }
 
-  drawTetrimino() {
-    const x_tetrimino = this.currentTetrimino.x;
-    const y_tetrimino = this.currentTetrimino.y;
-    const shape = this.currentTetrimino.shape;
+  drawTetromino() {
+    const x_tetromino = this.currentTetromino.x;
+    const y_tetromino = this.currentTetromino.y;
+    const shape = this.currentTetromino.shape;
     for (let i = 0; i < shape.length; i++) {
       for (let j = 0; j < shape[i].length; j++) {
         if (shape[i][j] === 1) {
-          const x = x_tetrimino + j;
-          const y = y_tetrimino + i;
+          const x = x_tetromino + j;
+          const y = y_tetromino + i;
           if (y > 2) {
             this.tetrosInGameDrawer.drawBlock(
               x,
               y - 3,
-              this.currentTetrimino.color
+              this.currentTetromino.color
             );
           }
         }
@@ -363,15 +363,15 @@ class TetrosBoardController {
     }
   }
 
-  clearTetrimino() {
-    const x_tetrimino = this.currentTetrimino.x;
-    const y_tetrimino = this.currentTetrimino.y;
-    const shape = this.currentTetrimino.shape;
+  clearTetromino() {
+    const x_tetromino = this.currentTetromino.x;
+    const y_tetromino = this.currentTetromino.y;
+    const shape = this.currentTetromino.shape;
     for (let i = 0; i < shape.length; i++) {
       for (let j = 0; j < shape[i].length; j++) {
         if (shape[i][j] === 1) {
-          const x = x_tetrimino + j;
-          const y = y_tetrimino + i;
+          const x = x_tetromino + j;
+          const y = y_tetromino + i;
           this.tetrosInGameDrawer.clearBlock(x, y - 3);
         }
       }
@@ -380,7 +380,7 @@ class TetrosBoardController {
 
   updateBackground() {
     this.clearBackground();
-    this.drawTetrimino();
+    this.drawTetromino();
     for (let y = 0; y < 23; y++) {
       for (let x = 0; x < 10; x++) {
         const blockColor = this.backgroundBlocks.getBlock(x, y);
@@ -435,24 +435,24 @@ class TetrosEventListener {
   initEventListeners() {
     document.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft") {
-        this.boardController.tryToMoveTetrimino(
-          this.boardController.currentTetrimino.x - 1,
-          this.boardController.currentTetrimino.y
+        this.boardController.tryToMoveTetromino(
+          this.boardController.currentTetromino.x - 1,
+          this.boardController.currentTetromino.y
         );
       } else if (event.key === "ArrowRight") {
-        this.boardController.tryToMoveTetrimino(
-          this.boardController.currentTetrimino.x + 1,
-          this.boardController.currentTetrimino.y
+        this.boardController.tryToMoveTetromino(
+          this.boardController.currentTetromino.x + 1,
+          this.boardController.currentTetromino.y
         );
       } else if (event.key === "ArrowDown") {
-        this.boardController.tryToMoveTetrimino(
-          this.boardController.currentTetrimino.x,
-          this.boardController.currentTetrimino.y + 1
+        this.boardController.tryToMoveTetromino(
+          this.boardController.currentTetromino.x,
+          this.boardController.currentTetromino.y + 1
         );
       } else if (event.key === "q") {
-        this.boardController.tryToRotateToLeftTetrimino();
+        this.boardController.tryToRotateToLeftTetromino();
       } else if (event.key === "e") {
-        this.boardController.tryToRotateToRightTetrimino();
+        this.boardController.tryToRotateToRightTetromino();
       }
     });
   }
@@ -496,16 +496,16 @@ class TetrosController {
       return;
     }
     this.lastLoopTime = currentTime;
-    if (!this.boardController.hasTetriminoMovedDown()) {
-      this.boardController.addTetriminoToBackground();
-      this.boardController.setRandomTetrimino();
+    if (!this.boardController.hasTetrominoMovedDown()) {
+      this.boardController.addTetrominoToBackground();
+      this.boardController.setRandomTetromino();
     }
-    this.boardController.clearTetrimino();
-    this.boardController.tryToMoveTetrimino(
-      this.boardController.currentTetrimino.x,
-      this.boardController.currentTetrimino.y + 1
+    this.boardController.clearTetromino();
+    this.boardController.tryToMoveTetromino(
+      this.boardController.currentTetromino.x,
+      this.boardController.currentTetromino.y + 1
     );
-    this.boardController.drawTetrimino();
+    this.boardController.drawTetromino();
     this.boardController.checkCompleteLines();
 
     requestAnimationFrame(this.gameLoop.bind(this));
