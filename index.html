@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tetris JS</title>
+    <title>Tetros JS</title>
     <meta name="description" content="A simple Tetris game implemented using HTML, CSS and JavaScript.">
     <meta name="keywords" content="HTML, CSS, JavaScript, Tetris, Game">
     <meta name="author" content="k0rval4n">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
+    <link rel="script" href="index.js">
 </head>
 <body>
     <div class="main-container">
-        <h1>Tetris JS</h1>
+        <h1>Tetros JS</h1>
         <div id="game-container">
+            <div id="level-container">
+                <div id="level-prefix-container">
+                    <b>Level: </b>
+                </div>
+                <div id="level-value-container">
+                    <p id="level-value">0</p>
+                </div>
+            </div>
             <div id="score-container">
                 <div id="score-prefix-container">
                     <b>Score: </b>
@@ -21,15 +30,17 @@
                     <p id="score-value">0</p>
                 </div>
             </div>
-            <div id="game-board"></div>
-            <button id="start-button" class="game-button">Start Game</button>
+            <div id="game-board">
+                <canvas id="game-canvas" height="600" width="300"></canvas>
+            </div>
+            <button id="start-button" type="button" class="game-button" onclick="startGame()">Start Game</button>
             <div id="in-game-controls">
                 <div id="pause-and-resume-buttons">
-                    <button id="pause-button" class="game-button">Pause Game</button>
-                    <button id="resume-button" class="game-button">Resume Game</button>
+                    <button id="pause-button" type="button" class="game-button" onclick="pauseGame()">Pause Game</button>
+                    <button id="resume-button" type="button" class="game-button" onclick="resumeGame()">Resume Game</button>
                 </div>
                 <div>
-                    <button id="stop-button" class="game-button">Stop Game</button>
+                    <button id="stop-button" type="button" class="game-button" onclick="stopGame()">Stop Game</button>
                 </div>
             </div>
         </div>
