@@ -442,32 +442,39 @@ class BackgroundBlocksController {
 class TetrosEventListener {
   constructor(boardController) {
     this.boardController = boardController;
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.initEventListeners();
   }
 
   initEventListeners() {
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") {
-        this.boardController.tryToMoveTetromino(
-          this.boardController.currentTetromino.x - 1,
-          this.boardController.currentTetromino.y
-        );
-      } else if (event.key === "ArrowRight") {
-        this.boardController.tryToMoveTetromino(
-          this.boardController.currentTetromino.x + 1,
-          this.boardController.currentTetromino.y
-        );
-      } else if (event.key === "ArrowDown") {
-        this.boardController.tryToMoveTetromino(
-          this.boardController.currentTetromino.x,
-          this.boardController.currentTetromino.y + 1
-        );
-      } else if (event.key === "q") {
-        this.boardController.tryToRotateToLeftTetromino();
-      } else if (event.key === "e") {
-        this.boardController.tryToRotateToRightTetromino();
-      }
-    });
+    document.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown(event) {
+    if (event.key === "ArrowLeft") {
+      this.boardController.tryToMoveTetromino(
+        this.boardController.currentTetromino.x - 1,
+        this.boardController.currentTetromino.y
+      );
+    } else if (event.key === "ArrowRight") {
+      this.boardController.tryToMoveTetromino(
+        this.boardController.currentTetromino.x + 1,
+        this.boardController.currentTetromino.y
+      );
+    } else if (event.key === "ArrowDown") {
+      this.boardController.tryToMoveTetromino(
+        this.boardController.currentTetromino.x,
+        this.boardController.currentTetromino.y + 1
+      );
+    } else if (event.key === "q") {
+      this.boardController.tryToRotateToLeftTetromino();
+    } else if (event.key === "e") {
+      this.boardController.tryToRotateToRightTetromino();
+    }
+  }
+
+  removeEventListeners() {
+    document.removeEventListener("keydown", this.handleKeyDown);
   }
 }
 
@@ -497,9 +504,9 @@ class TetrosController {
       this.boardController.backgroundBlocks
     );
     this.lastLoopTime = Date.now();
-    this.isFirstLoop = true;
     this.score = 0;
     this.linesCompleted = 0;
+    this.isRunning = true;
   }
 
   get level() {
@@ -507,6 +514,9 @@ class TetrosController {
   }
 
   gameLoop() {
+    if (!this.isRunning) {
+      return;
+    }
     if (this.gameOverChecker.checkGameOver()) {
       alert("Game Over");
       return;
@@ -573,6 +583,26 @@ class TetrosController {
     const levelElement = document.getElementById("level-value");
     levelElement.innerText = this.level;
   }
+
+  pause() {
+    this.isRunning = false;
+    this.eventListener.removeEventListeners();
+  }
+
+  resume() {
+    this.isRunning = true;
+    this.eventListener.initEventListeners();
+    this.gameLoop();
+  }
+
+  kill() {
+    this.isRunning = false;
+    this.boardController = null;
+    this.eventListener.removeEventListeners();
+    this.eventListener = null;
+    this.gameOverChecker = null;
+    this.backgroundBlocksController = null;
+  }
 }
 
 class TetrosScoreCalculator {
@@ -634,8 +664,10 @@ class TetrosSpeedCalculator {
   }
 }
 
+let tetrosController;
+
 const startGame = () => {
-  const tetrosController = new TetrosController();
+  tetrosController = new TetrosController();
   tetrosController.gameLoop();
   const startButton = document.getElementById("start-button");
   startButton.style.display = "none";
@@ -644,6 +676,7 @@ const startGame = () => {
 };
 
 const pauseGame = () => {
+  tetrosController.pause();
   const pauseButton = document.getElementById("pause-button");
   pauseButton.style.display = "none";
   const resumeButton = document.getElementById("resume-button");
@@ -651,10 +684,18 @@ const pauseGame = () => {
 };
 
 const resumeGame = () => {
+  tetrosController.resume();
   const resumeButton = document.getElementById("resume-button");
   resumeButton.style.display = "none";
   const pauseButton = document.getElementById("pause-button");
   pauseButton.style.display = "block";
 };
 
-const stopGame = () => {};
+const stopGame = () => {
+  tetrosController.kill();
+  tetrosController = null;
+  const inGameControls = document.getElementById("in-game-controls");
+  inGameControls.style.display = "none";
+  const startButton = document.getElementById("start-button");
+  startButton.style.display = "block";
+};
