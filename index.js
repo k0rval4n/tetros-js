@@ -77,17 +77,19 @@ class ITetromino extends Tetromino {
     // prettier-ignore
     const shapes = [
       [
+        [0, 0, 0, 0],
         [1, 1, 1, 1],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
       ],
       [
-        [1],
-        [1],
-        [1],
-        [1],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
       ],
     ];
     super(shapes, "cyan");
-    this.y = 1;
   }
 }
 
@@ -213,6 +215,8 @@ const TETROMINOS = [
   TTetromino,
 ];
 
+const DELTA_X = [0, -1, 1, -2, 2];
+
 class BackgroundBlocks {
   constructor() {
     this.blocks = [];
@@ -279,47 +283,57 @@ class TetrosBoardController {
   }
 
   tryToRotateToLeftTetromino() {
+    const leftRotationShape = this.currentTetromino.leftRotationShape;
+    const result = this.tryToRotateTetrimino(leftRotationShape);
+    if (result.canBeRotated) {
+      this.clearTetromino();
+      this.currentTetromino.rotateToLeft();
+      this.currentTetromino.x = result.newX;
+      this.currentTetromino.y = result.newY;
+      this.drawTetromino();
+    }
+  }
+
+  tryToRotateTetrimino(newShape) {
     const x_tetromino = this.currentTetromino.x;
     const y_tetromino = this.currentTetromino.y;
-    const leftRotationShape = this.currentTetromino.leftRotationShape;
-    for (let i = 0; i < leftRotationShape.length; i++) {
-      for (let j = 0; j < leftRotationShape[i].length; j++) {
-        if (leftRotationShape[i][j] === 1) {
-          const newX = x_tetromino + j;
-          const newY = y_tetromino + i;
-          if (newX < 0 || newX >= 10 || newY >= 23) {
-            return;
-          } else if (this.backgroundBlocks.getBlock(newX, newY)) {
-            return;
+    mainRotateLoop: for (const deltaX of DELTA_X) {
+      for (let i = 0; i < newShape.length; i++) {
+        for (let j = 0; j < newShape[i].length; j++) {
+          if (newShape[i][j] === 1) {
+            const newX = x_tetromino + j + deltaX;
+            const newY = y_tetromino + i;
+            if (newX < 0 || newX >= 10 || newY >= 23) {
+              continue mainRotateLoop;
+            } else if (this.backgroundBlocks.getBlock(newX, newY)) {
+              continue mainRotateLoop;
+            }
           }
         }
       }
+      return {
+        canBeRotated: true,
+        newX: x_tetromino + deltaX,
+        newY: y_tetromino,
+      };
     }
-    this.clearTetromino();
-    this.currentTetromino.rotateToLeft();
-    this.drawTetromino();
+    return {
+      canBeRotated: false,
+      newX: x_tetromino,
+      newY: y_tetromino,
+    };
   }
 
   tryToRotateToRightTetromino() {
-    const x_tetromino = this.currentTetromino.x;
-    const y_tetromino = this.currentTetromino.y;
     const rightRotationShape = this.currentTetromino.rightRotationShape;
-    for (let i = 0; i < rightRotationShape.length; i++) {
-      for (let j = 0; j < rightRotationShape[i].length; j++) {
-        if (rightRotationShape[i][j] === 1) {
-          const newX = x_tetromino + j;
-          const newY = y_tetromino + i;
-          if (newX < 0 || newX >= 10 || newY >= 23) {
-            return;
-          } else if (this.backgroundBlocks.getBlock(newX, newY)) {
-            return;
-          }
-        }
-      }
+    const result = this.tryToRotateTetrimino(rightRotationShape);
+    if (result.canBeRotated) {
+      this.clearTetromino();
+      this.currentTetromino.rotateToRight();
+      this.currentTetromino.x = result.newX;
+      this.currentTetromino.y = result.newY;
+      this.drawTetromino();
     }
-    this.clearTetromino();
-    this.currentTetromino.rotateToRight();
-    this.drawTetromino();
   }
 
   drawTetromino() {
@@ -484,10 +498,9 @@ class TetrosGameOverChecker {
   }
 
   checkGameOver() {
-    const backgroundBlocks = this.boardController.backgroundBlocks.blocks;
     for (let y = 0; y < 3; y++) {
       for (let x = 0; x < 10; x++) {
-        if (backgroundBlocks[x][y]) {
+        if (this.boardController.backgroundBlocks.getBlock(x, y)) {
           return true;
         }
       }
@@ -518,6 +531,7 @@ class TetrosController {
       return;
     }
     if (this.gameOverChecker.checkGameOver()) {
+      this.stop();
       alert("Game Over");
       return;
     }
@@ -595,7 +609,7 @@ class TetrosController {
     this.gameLoop();
   }
 
-  kill() {
+  stop() {
     this.isRunning = false;
     this.boardController = null;
     this.eventListener.removeEventListeners();
@@ -692,7 +706,7 @@ const resumeGame = () => {
 };
 
 const stopGame = () => {
-  tetrosController.kill();
+  tetrosController.stop();
   tetrosController = null;
   const inGameControls = document.getElementById("in-game-controls");
   inGameControls.style.display = "none";
