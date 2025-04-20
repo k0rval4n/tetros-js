@@ -1,7 +1,7 @@
 // Programmed by @k0rval4n
 // This is a simple Tetris game implemented using HTML, CSS and JavaScript.
 
-class TetrisCanvasDrawer {
+class TetrosCanvasDrawer {
   constructor(canvas) {
     if (!canvas) {
       throw new Error("Canvas element is required");
@@ -233,10 +233,10 @@ class BackgroundBlocks {
   }
 }
 
-class TetrisBoardController {
+class TetrosBoardController {
   constructor() {
     const gameCanvas = document.getElementById("game-canvas");
-    this.tetrisInGameDrawer = new TetrisCanvasDrawer(gameCanvas);
+    this.tetrosInGameDrawer = new TetrosCanvasDrawer(gameCanvas);
     this.backgroundBlocks = new BackgroundBlocks();
     this.setRandomTetrimino();
   }
@@ -352,7 +352,7 @@ class TetrisBoardController {
           const x = x_tetrimino + j;
           const y = y_tetrimino + i;
           if (y > 2) {
-            this.tetrisInGameDrawer.drawBlock(
+            this.tetrosInGameDrawer.drawBlock(
               x,
               y - 3,
               this.currentTetrimino.color
@@ -372,7 +372,7 @@ class TetrisBoardController {
         if (shape[i][j] === 1) {
           const x = x_tetrimino + j;
           const y = y_tetrimino + i;
-          this.tetrisInGameDrawer.clearBlock(x, y - 3);
+          this.tetrosInGameDrawer.clearBlock(x, y - 3);
         }
       }
     }
@@ -385,7 +385,7 @@ class TetrisBoardController {
       for (let x = 0; x < 10; x++) {
         const blockColor = this.backgroundBlocks.getBlock(x, y);
         if (blockColor) {
-          this.tetrisInGameDrawer.drawBlock(x, y - 3, blockColor);
+          this.tetrosInGameDrawer.drawBlock(x, y - 3, blockColor);
         }
       }
     }
@@ -394,7 +394,7 @@ class TetrisBoardController {
   clearBackground() {
     for (let y = 0; y < 23; y++) {
       for (let x = 0; x < 10; x++) {
-        this.tetrisInGameDrawer.clearBlock(x, y - 3);
+        this.tetrosInGameDrawer.clearBlock(x, y - 3);
       }
     }
   }
@@ -426,7 +426,7 @@ class TetrisBoardController {
   }
 }
 
-class TetrisEventListener {
+class TetrosEventListener {
   constructor(boardController) {
     this.boardController = boardController;
     this.initEventListeners();
@@ -458,7 +458,7 @@ class TetrisEventListener {
   }
 }
 
-class TetrisGameOverChecker {
+class TetrosGameOverChecker {
   constructor(boardController) {
     this.boardController = boardController;
   }
@@ -475,11 +475,11 @@ class TetrisGameOverChecker {
   }
 }
 
-class TetrisController {
+class TetrosController {
   constructor() {
-    this.boardController = new TetrisBoardController();
-    this.eventListener = new TetrisEventListener(this.boardController);
-    this.gameOverChecker = new TetrisGameOverChecker(this.boardController);
+    this.boardController = new TetrosBoardController();
+    this.eventListener = new TetrosEventListener(this.boardController);
+    this.gameOverChecker = new TetrosGameOverChecker(this.boardController);
     this.lastLoopTime = Date.now();
     this.isFirstLoop = true;
   }
@@ -513,8 +513,8 @@ class TetrisController {
 }
 
 const startGame = () => {
-  const tetrisController = new TetrisController();
-  tetrisController.gameLoop();
+  const tetrosController = new TetrosController();
+  tetrosController.gameLoop();
   const startButton = document.getElementById("start-button");
   startButton.style.display = "none";
   const inGameControls = document.getElementById("in-game-controls");
