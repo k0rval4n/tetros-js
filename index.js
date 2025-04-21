@@ -456,6 +456,24 @@ class BackgroundBlocksController {
 class TetrosEventListener {
   constructor(boardController) {
     this.boardController = boardController;
+    this.tetrosKeydownListener = new TetrosKeydownListener(boardController);
+    this.tetrosTouchListener = new TetrosTouchListener(boardController);
+  }
+
+  initEventListeners() {
+    this.tetrosKeydownListener.initEventListeners();
+    this.tetrosTouchListener.initEventListeners();
+  }
+
+  removeEventListeners() {
+    this.tetrosKeydownListener.removeEventListeners();
+    this.tetrosTouchListener.removeEventListeners();
+  }
+}
+
+class TetrosKeydownListener {
+  constructor(boardController) {
+    this.boardController = boardController;
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.initEventListeners();
   }
@@ -492,6 +510,63 @@ class TetrosEventListener {
   }
 }
 
+class TetrosTouchListener {
+  constructor(boardController) {
+    this.boardController = boardController;
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.startX = null;
+    this.startY = null;
+    this.initEventListeners();
+  }
+
+  initEventListeners() {
+    document.addEventListener("touchstart", this.handleTouchStart);
+    document.addEventListener("touchend", this.handleTouchEnd);
+  }
+
+  handleTouchStart(event) {
+    event.preventDefault();
+    this.startX = event.touches[0].clientX;
+    this.startY = event.touches[0].clientY;
+  }
+
+  handleTouchEnd(event) {
+    event.preventDefault();
+    const deltaX = event.changedTouches[0].clientX - this.startX;
+    const deltaY = event.changedTouches[0].clientY - this.startY;
+    this.startX = null;
+    this.startY = null;
+    if ((Math.abs(deltaX) < 10) && (Math.abs(deltaY) < 10)) {
+      this.boardController.tryToRotateToLeftTetromino();
+      return;
+    }
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        this.boardController.tryToMoveTetromino(
+          this.boardController.currentTetromino.x + 1,
+          this.boardController.currentTetromino.y
+        );
+      } else {
+        this.boardController.tryToMoveTetromino(
+          this.boardController.currentTetromino.x - 1,
+          this.boardController.currentTetromino.y
+        );
+      }
+    } else if (deltaY > 0) {
+      this.boardController.tryToMoveTetromino(
+        this.boardController.currentTetromino.x,
+        this.boardController.currentTetromino.y + 1
+      );
+    }
+  }
+
+  removeEventListeners() {
+    document.removeEventListener("touchstart", this.handleTouchStart);
+    document.removeEventListener("touchend", this.handleTouchEnd);
+  }
+}
 class TetrosGameOverChecker {
   constructor(boardController) {
     this.boardController = boardController;
