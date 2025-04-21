@@ -526,18 +526,30 @@ class TetrosTouchListener {
   }
 
   handleTouchStart(event) {
-    event.preventDefault();
+    if (
+      event.target === document.getElementById("pause-button") ||
+      event.target === document.getElementById("resume-button") ||
+      event.target === document.getElementById("stop-button")
+    ) {
+      return;
+    }
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
   }
 
   handleTouchEnd(event) {
-    event.preventDefault();
+    if (
+      event.target === document.getElementById("pause-button") ||
+      event.target === document.getElementById("resume-button") ||
+      event.target === document.getElementById("stop-button")
+    ) {
+      return;
+    }
     const deltaX = event.changedTouches[0].clientX - this.startX;
     const deltaY = event.changedTouches[0].clientY - this.startY;
     this.startX = null;
     this.startY = null;
-    if ((Math.abs(deltaX) < 10) && (Math.abs(deltaY) < 10)) {
+    if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
       this.boardController.tryToRotateToLeftTetromino();
       return;
     }
