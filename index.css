@@ -27,6 +27,11 @@ body {
   height: 100vh;
 }
 
+#game-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
 #score-container, #level-container  {
   display: flex;
   flex-direction: row;
