@@ -518,6 +518,7 @@ class TetrosTouchListener {
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.isMoving = false;
     this.mustCaptureTouch = false;
+    this.isFirstMove = false;
     this.startX = null;
     this.startY = null;
     this.initEventListeners();
@@ -539,6 +540,7 @@ class TetrosTouchListener {
     }
     this.isMoving = false;
     this.mustCaptureTouch = true;
+    this.isFirstMove = true;
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
   }
@@ -555,8 +557,9 @@ class TetrosTouchListener {
     const touchY = event.touches[0].clientY;
     const deltaX = touchX - this.startX;
     const deltaY = touchY - this.startY;
-    
-    if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) {
+    const norm = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+    if (Math.abs(deltaX) < 14 && Math.abs(deltaY) < 14) {
       return;
     }
 
@@ -568,7 +571,7 @@ class TetrosTouchListener {
 
     const gameCanvasWidth = document.getElementById("game-canvas").offsetWidth;
 
-    let timeout = 125;
+    let timeout = 75;
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX > 0) {
         this.boardController.tryToMoveTetromino(
@@ -581,22 +584,21 @@ class TetrosTouchListener {
           this.boardController.currentTetromino.y
         );
       }
-      if (Math.abs(deltaX) > 12) {
-        timeout = gameCanvasWidth / (1.5 * Math.log2(Math.abs(deltaX)));
-      }
     } else if (deltaY > 0) {
       this.boardController.tryToMoveTetromino(
         this.boardController.currentTetromino.x,
         this.boardController.currentTetromino.y + 1
       );
-      if (Math.abs(deltaY) > 12) {
-        timeout = gameCanvasWidth / Math.log2(Math.abs(deltaY));
-      }
+    }
+
+    if (Math.abs(norm) > 18) {
+      timeout = gameCanvasWidth / (1.5 * Math.log2(Math.abs(norm)));
     }
 
     this.startX = touchX;
     this.startY = touchY;
     this.mustCaptureTouch = false;
+    this.isFirstMove = false;
     setTimeout(() => {
       this.mustCaptureTouch = true;
     }, timeout);
