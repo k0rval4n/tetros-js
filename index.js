@@ -514,7 +514,10 @@ class TetrosTouchListener {
   constructor(boardController) {
     this.boardController = boardController;
     this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.isMoving = false;
+    this.mustCaptureTouch = false;
     this.startX = null;
     this.startY = null;
     this.initEventListeners();
@@ -522,6 +525,7 @@ class TetrosTouchListener {
 
   initEventListeners() {
     document.addEventListener("touchstart", this.handleTouchStart);
+    document.addEventListener("touchmove", this.handleTouchMove);
     document.addEventListener("touchend", this.handleTouchEnd);
   }
 
@@ -533,11 +537,13 @@ class TetrosTouchListener {
     ) {
       return;
     }
+    this.isMoving = false;
+    this.mustCaptureTouch = true;
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
   }
 
-  handleTouchEnd(event) {
+  handleTouchMove(event) {
     if (
       event.target === document.getElementById("pause-button") ||
       event.target === document.getElementById("resume-button") ||
@@ -545,15 +551,24 @@ class TetrosTouchListener {
     ) {
       return;
     }
-    const deltaX = event.changedTouches[0].clientX - this.startX;
-    const deltaY = event.changedTouches[0].clientY - this.startY;
-    this.startX = null;
-    this.startY = null;
-    if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
-      this.boardController.tryToRotateToLeftTetromino();
+    const touchX = event.touches[0].clientX;
+    const touchY = event.touches[0].clientY;
+    const deltaX = touchX - this.startX;
+    const deltaY = touchY - this.startY;
+    
+    if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5) {
       return;
     }
 
+    if (!this.mustCaptureTouch) {
+      return;
+    }
+
+    this.isMoving = true;
+
+    const gameCanvasWidth = document.getElementById("game-canvas").offsetWidth;
+
+    let timeout = 125;
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX > 0) {
         this.boardController.tryToMoveTetromino(
@@ -566,16 +581,40 @@ class TetrosTouchListener {
           this.boardController.currentTetromino.y
         );
       }
+      if (Math.abs(deltaX) > 12) {
+        timeout = gameCanvasWidth / (1.5 * Math.log2(Math.abs(deltaX)));
+      }
     } else if (deltaY > 0) {
       this.boardController.tryToMoveTetromino(
         this.boardController.currentTetromino.x,
         this.boardController.currentTetromino.y + 1
       );
+      if (Math.abs(deltaY) > 12) {
+        timeout = gameCanvasWidth / Math.log2(Math.abs(deltaY));
+      }
+    }
+
+    this.startX = touchX;
+    this.startY = touchY;
+    this.mustCaptureTouch = false;
+    setTimeout(() => {
+      this.mustCaptureTouch = true;
+    }, timeout);
+  }
+
+  handleTouchEnd(event) {
+    this.mustCaptureTouch = false;
+    const deltaX = event.changedTouches[0].clientX - this.startX;
+    const deltaY = event.changedTouches[0].clientY - this.startY;
+
+    if (Math.abs(deltaX) < 5 && Math.abs(deltaY) < 5 && !this.isMoving) {
+      this.boardController.tryToRotateToLeftTetromino();
     }
   }
 
   removeEventListeners() {
     document.removeEventListener("touchstart", this.handleTouchStart);
+    document.removeEventListener("touchmove", this.handleTouchMove);
     document.removeEventListener("touchend", this.handleTouchEnd);
   }
 }
