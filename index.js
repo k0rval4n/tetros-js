@@ -680,11 +680,13 @@ class TetrosController {
 
       requestAnimationFrame(this.gameLoop.bind(this));
     }
+    this.eventListener.removeEventListeners();
     this.tryToMoveTetrominoDown();
     this.removeCompletedLinesAndAddScore();
     this.boardController.updateBackground();
     this.updateScore();
     this.updateLevel();
+    this.eventListener.initEventListeners();
 
     requestAnimationFrame(this.gameLoop.bind(this));
   }
@@ -731,14 +733,30 @@ class TetrosController {
     levelElement.innerText = this.level;
   }
 
+  start() {
+    this.gameLoop();
+    const startButton = document.getElementById("start-button");
+    startButton.style.display = "none";
+    const inGameControls = document.getElementById("in-game-controls");
+    inGameControls.style.display = "flex";
+  }
+
   pause() {
     this.isRunning = false;
     this.eventListener.removeEventListeners();
+    const pauseButton = document.getElementById("pause-button");
+    pauseButton.style.display = "none";
+    const resumeButton = document.getElementById("resume-button");
+    resumeButton.style.display = "block";
   }
 
   resume() {
     this.isRunning = true;
     this.eventListener.initEventListeners();
+    const resumeButton = document.getElementById("resume-button");
+    resumeButton.style.display = "none";
+    const pauseButton = document.getElementById("pause-button");
+    pauseButton.style.display = "block";
     this.gameLoop();
   }
 
@@ -749,6 +767,10 @@ class TetrosController {
     this.eventListener = null;
     this.gameOverChecker = null;
     this.backgroundBlocksController = null;
+    const inGameControls = document.getElementById("in-game-controls");
+    inGameControls.style.display = "none";
+    const startButton = document.getElementById("start-button");
+    startButton.style.display = "block";
   }
 }
 
@@ -815,34 +837,18 @@ let tetrosController;
 
 const startGame = () => {
   tetrosController = new TetrosController();
-  tetrosController.gameLoop();
-  const startButton = document.getElementById("start-button");
-  startButton.style.display = "none";
-  const inGameControls = document.getElementById("in-game-controls");
-  inGameControls.style.display = "flex";
+  tetrosController.start();
 };
 
 const pauseGame = () => {
   tetrosController.pause();
-  const pauseButton = document.getElementById("pause-button");
-  pauseButton.style.display = "none";
-  const resumeButton = document.getElementById("resume-button");
-  resumeButton.style.display = "block";
 };
 
 const resumeGame = () => {
   tetrosController.resume();
-  const resumeButton = document.getElementById("resume-button");
-  resumeButton.style.display = "none";
-  const pauseButton = document.getElementById("pause-button");
-  pauseButton.style.display = "block";
 };
 
 const stopGame = () => {
   tetrosController.stop();
   tetrosController = null;
-  const inGameControls = document.getElementById("in-game-controls");
-  inGameControls.style.display = "none";
-  const startButton = document.getElementById("start-button");
-  startButton.style.display = "block";
 };
