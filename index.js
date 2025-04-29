@@ -448,6 +448,7 @@ class BackgroundBlocksController {
     for (let i = y; i > 0; i--) {
       this.backgroundBlocks.blocks[i] = this.backgroundBlocks.blocks[i - 1];
     }
+    this.backgroundBlocks.blocks[0] = [];
   }
 }
 
