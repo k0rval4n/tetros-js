@@ -255,7 +255,7 @@ class TetrosBoardController {
     if (!this.canTetrominoMove(x, y)) {
       return;
     }
-    
+
     this.clearTetromino();
     this.currentTetromino.x = x;
     this.currentTetromino.y = y;
@@ -279,7 +279,7 @@ class TetrosBoardController {
   }
 
   isTetrominoBlockInValidPosition(x, y) {
-    return x >= 0 && x < 10 && y < 23 && !this.backgroundBlocks.getBlock(x, y)
+    return x >= 0 && x < 10 && y < 23 && !this.backgroundBlocks.getBlock(x, y);
   }
 
   tryToRotateToLeftTetromino() {
@@ -668,10 +668,12 @@ class TetrosController {
       return;
     }
     this.lastLoopTime = currentTime;
-    if (!this.boardController.canTetrominoMove(
-      this.boardController.currentTetromino.x,
-      this.boardController.currentTetromino.y + 1
-    )) {
+    if (
+      !this.boardController.canTetrominoMove(
+        this.boardController.currentTetromino.x,
+        this.boardController.currentTetromino.y + 1
+      )
+    ) {
       this.eventListener.removeEventListeners();
       this.prepareNextTetromino();
       this.eventListener.initEventListeners();
