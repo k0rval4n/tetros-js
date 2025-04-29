@@ -248,38 +248,38 @@ class TetrosBoardController {
   setRandomTetromino() {
     const randomIndex =
       Math.floor(Math.random() * TETROMINOS.length) % TETROMINOS.length;
-    this.lastY = null;
     this.currentTetromino = new TETROMINOS[randomIndex]();
   }
 
-  hasTetrominoMovedDown() {
-    const y_tetromino = this.currentTetromino.y;
-    if (this.lastY !== y_tetromino) {
-      this.lastY = y_tetromino;
-      return true;
+  tryToMoveTetromino(x, y) {
+    if (!this.canTetrominoMove(x, y)) {
+      return;
     }
-    return false;
+
+    this.clearTetromino();
+    this.currentTetromino.x = x;
+    this.currentTetromino.y = y;
+    this.drawTetromino();
   }
 
-  tryToMoveTetromino(x, y) {
+  canTetrominoMove(x, y) {
     const shape = this.currentTetromino.shape;
     for (let i = 0; i < shape.length; i++) {
       for (let j = 0; j < shape[i].length; j++) {
         if (shape[i][j] === 1) {
           const newX = x + j;
           const newY = y + i;
-          if (newX < 0 || newX >= 10 || newY >= 23) {
-            return;
-          } else if (this.backgroundBlocks.getBlock(newX, newY)) {
-            return;
+          if (!this.isTetrominoBlockInValidPosition(newX, newY)) {
+            return false;
           }
         }
       }
     }
-    this.clearTetromino();
-    this.currentTetromino.x = x;
-    this.currentTetromino.y = y;
-    this.drawTetromino();
+    return true;
+  }
+
+  isTetrominoBlockInValidPosition(x, y) {
+    return x >= 0 && x < 10 && y < 23 && !this.backgroundBlocks.getBlock(x, y);
   }
 
   tryToRotateToLeftTetromino() {
@@ -303,9 +303,7 @@ class TetrosBoardController {
           if (newShape[i][j] === 1) {
             const newX = x_tetromino + j + deltaX;
             const newY = y_tetromino + i;
-            if (newX < 0 || newX >= 10 || newY >= 23) {
-              continue mainRotateLoop;
-            } else if (this.backgroundBlocks.getBlock(newX, newY)) {
+            if (!this.isTetrominoBlockInValidPosition(newX, newY)) {
               continue mainRotateLoop;
             }
           }
@@ -670,8 +668,15 @@ class TetrosController {
       return;
     }
     this.lastLoopTime = currentTime;
-    if (!this.boardController.hasTetrominoMovedDown()) {
+    if (
+      !this.boardController.canTetrominoMove(
+        this.boardController.currentTetromino.x,
+        this.boardController.currentTetromino.y + 1
+      )
+    ) {
+      this.eventListener.removeEventListeners();
       this.prepareNextTetromino();
+      this.eventListener.initEventListeners();
 
       requestAnimationFrame(this.gameLoop.bind(this));
     }
