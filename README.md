@@ -1,6 +1,9 @@
 # Tetros JS
+<!-- https://stackoverflow.com/a/73422089 -->
 [![License badge](https://img.shields.io/badge/license-MIT-8A2BE2)](/LICENSE)
-![Version badge](https://img.shields.io/badge/version-1.0.0-green)
+<picture>
+  <img alt="Version badge" src="https://img.shields.io/badge/version-1.0.0-green">
+</picture>
 
 A simple Tetris game implemented using HTML, CSS and JavaScript. It doesn't need external libraries or bundlers, all necessary elements are contained in:
 
