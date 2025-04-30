@@ -11,7 +11,7 @@ A simple Tetris game implemented using HTML, CSS and JavaScript. It doesn't need
 - [```index.js```](/index.js): Contains all game logic.
 
 ## How to play?
-> **_NOTE:_**  A live preview can be accessed [here](placeholder). Enjoy!
+> **_NOTE:_**  A live preview can be accessed [here](https://k0rval4n.github.io/tetros-js/). Enjoy!
 
 1. Clone the repository:
 ```bash
