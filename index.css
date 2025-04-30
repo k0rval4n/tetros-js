@@ -10,6 +10,10 @@
                                       supported by Chrome, Edge, Opera and Firefox */
 }
 
+:root {
+  font-size: max(calc(30vh * 16 /150), 16px);
+}
+
 body {
   background-color: black;
   color: white;
@@ -27,9 +31,34 @@ body {
   height: 100vh;
 }
 
+#game-header {
+  width: 30vh;
+  min-width: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+#github-logo {
+  height: 3vh;
+  min-height: 15px;
+  width: 3vh;
+  min-width: 15px;
+}
+
 #game-title {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+#info-logo {
+  height: 3vh;
+  min-height: 15px;
+  width: 3vh;
+  min-width: 15px;
 }
 
 #score-container, #level-container  {
@@ -56,6 +85,10 @@ body {
   justify-content: start;
 }
 
+#score-prefix-container > b, #level-prefix-container > b {
+  font-size: 0.75rem;
+}
+
 #score-value-container, #level-value-container {
   display: flex;
   flex-direction: column;
@@ -64,6 +97,7 @@ body {
 }
 
 #score-value-container > p, #level-value-container > p {
+  font-size: 0.75rem;
   margin: 0;
   color: white;
 }
@@ -96,9 +130,9 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  margin: 5px 0;
-  min-height: 2rem;
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+  height: 1.6rem;
 }
 
 #in-game-controls {
