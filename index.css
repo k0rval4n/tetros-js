@@ -186,3 +186,62 @@ body {
   background-color: crimson;
   color: white;
 }
+
+:modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: beige;
+  border: 2px solid burlywood;
+  border-radius: 5px;
+}
+
+#info-dialog {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+#info-dialog > form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#close-info-btn {
+  display: block;
+  border: black solid 2px;
+  color: var(--white);
+  background-color: red;
+}
+
+#info-dialog-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+#keyboard-inputs-message, #touch-inputs-message {
+  margin: 0 0 0.3rem 0;
+  text-align: center;
+}
+
+#keyboard-inputs-container, #touch-inputs-container {
+  margin-bottom: 0.5rem;
+}
+
+#keyboard-inputs-container > table, #touch-inputs-container > table {
+  padding: 0 0.5rem 0 0.5rem;
+  border: black solid 2px;
+}
+
+#touch-inputs-container {
+  margin-top: 0.5rem;
+}
+
+#info-dialog-author-message {
+  font-size: 0.7rem;
+  margin: 0.3rem 0 0 0;
+}
