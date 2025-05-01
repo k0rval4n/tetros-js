@@ -2,7 +2,7 @@
 <!-- https://stackoverflow.com/a/73422089 -->
 [![License badge](https://img.shields.io/badge/license-MIT-8A2BE2)](/LICENSE)
 <picture>
-  <img alt="Version badge" src="https://img.shields.io/badge/version-1.1.1-green">
+  <img alt="Version badge" src="https://img.shields.io/badge/version-1.1.2-green">
 </picture>
 
 A simple Tetris game implemented using HTML, CSS and JavaScript. It doesn't need external libraries or bundlers, all necessary elements are contained in:
@@ -14,7 +14,8 @@ A simple Tetris game implemented using HTML, CSS and JavaScript. It doesn't need
 - [```index.js```](/index.js): Contains all game logic.
 
 ## How to play?
-> **_NOTE:_**  A live preview can be accessed [here](https://k0rval4n.github.io/tetros-js/). Enjoy!
+> [!TIP]
+> A live preview can be accessed [here](https://k0rval4n.github.io/tetros-js/). Enjoy!
 
 1. Clone the repository:
 ```bash
@@ -34,7 +35,8 @@ This project is licensed under the MIT License.
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
-> **_NOTE:_**  Valid ```<prefix>``` are:
+> [!IMPORTANT]
+> Valid ```<prefix>``` are:
 > - ```feat```: when you are adding a new feature.
 > - ```fix```: when you are patching a bug.
 
