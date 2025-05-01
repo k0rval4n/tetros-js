@@ -864,6 +864,6 @@ const infoLogo = document.getElementById("info-logo");
 const infoDialog = document.getElementById("info-dialog");
 
 infoLogo.addEventListener("click", () => {
-  tetrosController.pause();
+  pauseGame();
   infoDialog.showModal();
 });
