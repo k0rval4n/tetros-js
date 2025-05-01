@@ -24,7 +24,8 @@
   --top-logos-min-height: 15px;
   --top-logos-width: 3vh;
   --top-logos-min-width: 15px;
-  --font-size: max(calc(var(--game-board-width-without-vh) * 16 / var(--game-board-min-width-without-px)) * 1vh, 16px);
+  --variable-font-size: calc(var(--game-board-width-without-vh) * 16 / var(--game-board-min-width-without-px)* 1vh);
+  --font-size: max(var(--variable-font-size), 16px);
   font-size: var(--font-size);
 }
 
