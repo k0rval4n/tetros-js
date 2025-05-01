@@ -12,11 +12,13 @@
 
 :root {
   font-size: max(calc(30vh * 16 /150), 16px);
+  --white: #f2f2f2;
+  --white-focused: #d2d2d2;
 }
 
 body {
   background-color: black;
-  color: white;
+  color: var(--white);
   margin: 0;
   padding: 0;
   touch-action: none;
@@ -41,11 +43,16 @@ body {
   margin-bottom: 10px;
 }
 
-#github-logo {
+#github-logo, #github-repo-link {
+  color: var(--white);
   height: 3vh;
   min-height: 15px;
   width: 3vh;
   min-width: 15px;
+}
+
+#github-logo:hover, #github-repo-link:hover {
+  color: var(--white-focused);
 }
 
 #game-title {
@@ -59,6 +66,11 @@ body {
   min-height: 15px;
   width: 3vh;
   min-width: 15px;
+}
+
+#info-logo:hover {
+  color: var(--white-focused);
+  cursor: pointer;
 }
 
 #score-container, #level-container  {
