@@ -10,9 +10,15 @@
                                       supported by Chrome, Edge, Opera and Firefox */
 }
 
+:root {
+  font-size: max(calc(30vh * 16 /150), 16px);
+  --white: #f2f2f2;
+  --white-focused: #d2d2d2;
+}
+
 body {
   background-color: black;
-  color: white;
+  color: var(--white);
   margin: 0;
   padding: 0;
   touch-action: none;
@@ -27,9 +33,44 @@ body {
   height: 100vh;
 }
 
+#game-header {
+  width: 30vh;
+  min-width: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+#github-logo, #github-repo-link {
+  color: var(--white);
+  height: 3vh;
+  min-height: 15px;
+  width: 3vh;
+  min-width: 15px;
+}
+
+#github-logo:hover, #github-repo-link:hover {
+  color: var(--white-focused);
+}
+
 #game-title {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+#info-logo {
+  height: 3vh;
+  min-height: 15px;
+  width: 3vh;
+  min-width: 15px;
+}
+
+#info-logo:hover {
+  color: var(--white-focused);
+  cursor: pointer;
 }
 
 #score-container, #level-container  {
@@ -56,6 +97,10 @@ body {
   justify-content: start;
 }
 
+#score-prefix-container > b, #level-prefix-container > b {
+  font-size: 0.75rem;
+}
+
 #score-value-container, #level-value-container {
   display: flex;
   flex-direction: column;
@@ -64,6 +109,7 @@ body {
 }
 
 #score-value-container > p, #level-value-container > p {
+  font-size: 0.75rem;
   margin: 0;
   color: white;
 }
@@ -96,9 +142,9 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  margin: 5px 0;
-  min-height: 2rem;
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+  height: 1.6rem;
 }
 
 #in-game-controls {
@@ -139,4 +185,63 @@ body {
   min-width: 150px;
   background-color: crimson;
   color: white;
+}
+
+:modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: beige;
+  border: 2px solid burlywood;
+  border-radius: 5px;
+}
+
+#info-dialog {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+#info-dialog > form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#close-info-btn {
+  display: block;
+  border: black solid 2px;
+  color: var(--white);
+  background-color: red;
+}
+
+#info-dialog-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+#keyboard-inputs-message, #touch-inputs-message {
+  margin: 0 0 0.3rem 0;
+  text-align: center;
+}
+
+#keyboard-inputs-container, #touch-inputs-container {
+  margin-bottom: 0.5rem;
+}
+
+#keyboard-inputs-container > table, #touch-inputs-container > table {
+  padding: 0 0.5rem 0 0.5rem;
+  border: black solid 2px;
+}
+
+#touch-inputs-container {
+  margin-top: 0.5rem;
+}
+
+#info-dialog-author-message {
+  font-size: 0.7rem;
+  margin: 0.3rem 0 0 0;
 }

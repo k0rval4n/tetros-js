@@ -842,14 +842,28 @@ const startGame = () => {
 };
 
 const pauseGame = () => {
-  tetrosController.pause();
+  if (tetrosController) {
+    tetrosController.pause();
+  }
 };
 
 const resumeGame = () => {
-  tetrosController.resume();
+  if (tetrosController) {
+    tetrosController.resume();
+  }
 };
 
 const stopGame = () => {
-  tetrosController.stop();
+  if (tetrosController) {
+    tetrosController.stop();
+  }
   tetrosController = null;
 };
+
+const infoLogo = document.getElementById("info-logo");
+const infoDialog = document.getElementById("info-dialog");
+
+infoLogo.addEventListener("click", () => {
+  tetrosController.pause();
+  infoDialog.showModal();
+});
