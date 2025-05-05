@@ -46,6 +46,18 @@ body {
   height: var(--main-container-height);
 }
 
+#game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0d0d;
+  width: calc(var(--game-board-width) * 1.15);
+  min-width: calc(var(--game-board-min-width) * 1.15);
+  height: calc((var(--game-board-height) + 7rem) * 1.06);
+  min-height: calc((var(--game-board-min-height) + 7rem) * 1.06);
+}
+
 #game-header {
   width: var(--game-board-width);
   min-width: var(--game-board-min-width);
