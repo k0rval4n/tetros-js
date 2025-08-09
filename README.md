@@ -2,7 +2,7 @@
 <!-- https://stackoverflow.com/a/73422089 -->
 [![License badge](https://img.shields.io/badge/license-MIT-8A2BE2)](/LICENSE)
 <picture>
-  <img alt="Version badge" src="https://img.shields.io/github/v/tag/k0rval4n/tetros-js?label=version&color=green">
+  <img alt="Version badge" src="https://img.shields.io/github/v/tag/k0rval4n/tetros-js?include_prereleases&label=version&color=green">
 </picture>
 
 
