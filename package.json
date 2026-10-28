@@ -1,0 +1,17 @@
+{
+  "name": "Tetros JS",
+  "version": "2.0.0",
+  "description": "A simple Tetris game implemented using HTML, CSS and JavaScript. Created by @k0rval4n.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "k0rval4n",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "8.3.5"
+  }
+}
