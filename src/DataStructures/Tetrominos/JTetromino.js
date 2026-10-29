@@ -1,0 +1,28 @@
+import Tetromino from "~/DataStructures/Tetrominos/Tetromino.js";
+
+
+export default class JTetromino extends Tetromino {
+  constructor() {
+    const shapes = [
+      [
+        [1, 1, 1],
+        [0, 0, 1],
+      ],
+      [
+        [0, 1],
+        [0, 1],
+        [1, 1],
+      ],
+      [
+        [1, 0, 0],
+        [1, 1, 1],
+      ],
+      [
+        [1, 1],
+        [1, 0],
+        [1, 0],
+      ],
+    ];
+    super(shapes, "blue");
+  }
+}
