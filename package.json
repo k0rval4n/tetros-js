@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "A simple Tetris game implemented using HTML, CSS and JavaScript. Created by @k0rval4n.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
