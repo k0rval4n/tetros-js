@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "checkJs": true,
-    "target": "ES6",
+    "target": "esnext",
     "paths": {
       "~/*": ["./src/*"]
     }
