@@ -1,0 +1,24 @@
+export default class TetrosCanvasDrawer {
+  constructor(canvas) {
+    if (!canvas) {
+      throw new Error("Canvas element is required");
+    }
+    this.canvas = canvas;
+    this.context = this.canvas.getContext("2d");
+  }
+
+  drawBlock(x, y, color) {
+    this.context.fillStyle = color;
+    const pixelSize = this.getPixelSize();
+    this.context.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+  }
+
+  getPixelSize() {
+    return this.canvas.width / 10;
+  }
+
+  clearBlock(x, y) {
+    const pixelSize = this.getPixelSize();
+    this.context.clearRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
+  }
+}
