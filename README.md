@@ -6,13 +6,13 @@
 </picture>
 
 
-A simple Tetris game implemented using HTML, CSS and JavaScript. It doesn't need external libraries or bundlers, all necessary elements are contained in:
+A simple Tetris game implemented using HTML, CSS and JavaScript. It uses Vite to bundle the JavaScript source files:
 
 - [```index.html```](/index.html): Base HTML to play the game using a web browser.
 
 - [```index.css```](/index.css): Styles of HTML elements used to show the game.
 
-- [```index.js```](/index.js): Contains all game logic.
+- [```/src```](/src): Folder that contains all game logic.
 
 ## How to play?
 > [!TIP]
@@ -28,7 +28,20 @@ git clone https://github.com/k0rval4n/tetros-js.git
 cd tetros-js
 ```
 
-3. Open [```index.html```](/index.html) in your browser to start playing!
+3. Install dependencies:
+```bash
+npm install
+```
+
+4. Run locally:
+```bash
+npm run dev
+```
+
+5. Build the project:
+```bash
+npm run build
+```
 
 ## License
 This project is licensed under the MIT License.
